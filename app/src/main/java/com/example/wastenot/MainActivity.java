@@ -22,16 +22,16 @@ public class MainActivity extends AppCompatActivity {
 
     private CustomAdapter adapter;
     private RecyclerView recyclerView;
-    ProgressDialog progressDoalog;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        progressDoalog = new ProgressDialog(MainActivity.this);
-        progressDoalog.setMessage("Loading....");
-        progressDoalog.show();
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Loading....");
+        progressDialog.show();
 
         /*Create handle for the RetrofitInstance interface*/
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
@@ -39,13 +39,13 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<RetroList>>() {
             @Override
             public void onResponse(Call<List<RetroList>> call, Response<List<RetroList>> response) {
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
                 generateDataList(response.body());
             }
 
             @Override
             public void onFailure(Call<List<RetroList>> call, Throwable t) {
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
