@@ -1,12 +1,16 @@
 package com.example.wastenot;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.example.wastenot.activities.DescriptionActivity;
 import com.example.wastenot.adapter.CustomAdapter;
 import com.example.wastenot.model.RetroList;
 import com.example.wastenot.network.GetDataService;
@@ -18,7 +22,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+import static android.content.ContentValues.TAG;
+
+public class MainActivity extends AppCompatActivity  {
 
     private CustomAdapter adapter;
     private RecyclerView recyclerView;
@@ -60,3 +66,4 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 }
+
