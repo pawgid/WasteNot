@@ -1,9 +1,6 @@
 package com.example.wastenot.adapter;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wastenot.MainActivity;
+import com.example.wastenot.activities.MainActivity;
 import com.example.wastenot.R;
 import com.example.wastenot.activities.DescriptionActivity;
 import com.example.wastenot.model.RetroList;
@@ -57,10 +54,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         public void onClick(View v) {
             Log.d(TAG, "onClick " + getPosition() + " " + mView);
             Toast.makeText(context, "You clicked item number: " + getAdapterPosition() +  "\n" + "Total items: " + getItemCount(), Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(getActivity(context), DescriptionActivity.class);
             Intent intent = new Intent(v.getContext(), DescriptionActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("TITLE", dataList.get(getAdapterPosition()).getTitle());
+            bundle.putString("IMAGE_URL", dataList.get(getAdapterPosition()).getUrl());
+            bundle.putInt("ID", dataList.get(getAdapterPosition()).getId());
             intent.putExtras(bundle);
             v.getContext().startActivity(intent);
         }
@@ -78,12 +76,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         holder.txtTitle.setText(dataList.get(position).getTitle());
 
         Picasso.Builder builder = new Picasso.Builder(context);
-        builder.downloader(new OkHttp3Downloader(context));
+//        builder.downloader(new OkHttp3Downloader(context));
         builder.build().load(dataList.get(position).getThumbnailUrl())
                 .placeholder((R.drawable.ic_launcher_background))
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.coverImage);
-
     }
 
     @Override
