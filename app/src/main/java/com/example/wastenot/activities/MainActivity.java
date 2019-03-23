@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.example.wastenot.R;
-import com.example.wastenot.adapter.CustomAdapter;
+import com.example.wastenot.adapter.RecyclerListAdapter;
 import com.example.wastenot.model.RetroList;
 import com.example.wastenot.network.GetDataService;
 import com.example.wastenot.network.RetrofitClientInstance;
@@ -21,7 +21,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private CustomAdapter adapter;
+    private RecyclerListAdapter adapter;
     private RecyclerView recyclerView;
     ProgressDialog progressDialog;
 
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        recyclerView = findViewById(R.id.customRecyclerView);
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Loading....");
         progressDialog.show();
@@ -54,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*Method to generate List of data using RecyclerView with custom adapter*/
     private void generateDataList(List<RetroList> photoList) {
-        recyclerView = findViewById(R.id.customRecyclerView);
-        adapter = new CustomAdapter(this, photoList);
+        adapter = new RecyclerListAdapter(this, photoList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

@@ -30,6 +30,8 @@
         </activity>
         <activity android:name=".activities.DescriptionActivity" />
         <activity android:name=".activities.MapsActivity" />
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
     </application>
 
 </manifest>

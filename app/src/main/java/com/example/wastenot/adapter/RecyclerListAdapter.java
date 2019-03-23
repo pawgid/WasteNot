@@ -16,20 +16,19 @@ import com.example.wastenot.activities.MainActivity;
 import com.example.wastenot.R;
 import com.example.wastenot.activities.DescriptionActivity;
 import com.example.wastenot.model.RetroList;
-import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
+public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.CustomViewHolder> {
 
     private List<RetroList> dataList;
     private Context context;
     public MainActivity mainActivity;
 
-    public CustomAdapter(Context context, List<RetroList> dataList) {
+    public RecyclerListAdapter(Context context, List<RetroList> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
