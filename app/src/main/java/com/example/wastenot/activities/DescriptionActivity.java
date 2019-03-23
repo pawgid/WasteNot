@@ -3,11 +3,8 @@ package com.example.wastenot.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,14 +14,10 @@ import com.squareup.picasso.Picasso;
 
 public class DescriptionActivity extends AppCompatActivity {
 
-
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.description);
+        setContentView(R.layout.activity_description);
         Bundle bundle = getIntent().getExtras();
         int id = bundle.getInt("ID");
         String detailedDescription = bundle.getString("TITLE");
@@ -45,10 +38,6 @@ public class DescriptionActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 
 
 }

@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private CustomAdapter adapter;
     private RecyclerView recyclerView;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity  {
     /*Method to generate List of data using RecyclerView with custom adapter*/
     private void generateDataList(List<RetroList> photoList) {
         recyclerView = findViewById(R.id.customRecyclerView);
-        adapter = new CustomAdapter(this,photoList);
+        adapter = new CustomAdapter(this, photoList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

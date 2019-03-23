@@ -29,7 +29,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     private Context context;
     public MainActivity mainActivity;
 
-    public CustomAdapter(Context context,List<RetroList> dataList){
+    public CustomAdapter(Context context, List<RetroList> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
@@ -53,7 +53,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         @Override
         public void onClick(View v) {
             Log.d(TAG, "onClick " + getPosition() + " " + mView);
-            Toast.makeText(context, "You clicked item number: " + getAdapterPosition() +  "\n" + "Total items: " + getItemCount(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "You clicked item number: " + getAdapterPosition() + "\n" + "Total items: " + getItemCount(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(v.getContext(), DescriptionActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("TITLE", dataList.get(getAdapterPosition()).getTitle());
