@@ -1,17 +1,30 @@
 package com.example.wastenot.model;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.Manifest;
+import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GPSTracker extends Service implements LocationListener {
 
@@ -39,10 +52,12 @@ public class GPSTracker extends Service implements LocationListener {
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
+
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
     }
+
 
     public Location getLocation() {
         try {
@@ -107,7 +122,7 @@ public class GPSTracker extends Service implements LocationListener {
     /**
      * Stop using GPS listener Calling this function will stop using GPS in your
      * app
-     * */
+     */
     public void stopUsingGPS() {
         if (locationManager != null) {
             locationManager.removeUpdates(GPSTracker.this);
@@ -116,7 +131,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Function to get latitude
-     * */
+     */
     public double getLatitude() {
         if (location != null) {
             latitude = location.getLatitude();
@@ -128,7 +143,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Function to get longitude
-     * */
+     */
     public double getLongitude() {
         if (location != null) {
             longitude = location.getLongitude();
@@ -142,7 +157,7 @@ public class GPSTracker extends Service implements LocationListener {
      * Function to check GPS/wifi enabled
      *
      * @return boolean
-     * */
+     */
     public boolean canGetLocation() {
         return this.canGetLocation;
     }
@@ -150,7 +165,7 @@ public class GPSTracker extends Service implements LocationListener {
     /**
      * Function to show settings alert dialog On pressing Settings button will
      * lauch Settings Options
-     * */
+     */
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
@@ -185,7 +200,6 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
     }
 
     @Override
@@ -204,5 +218,5 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-
 }
+
