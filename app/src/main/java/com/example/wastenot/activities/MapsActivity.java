@@ -1,7 +1,10 @@
 package com.example.wastenot.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -29,7 +32,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String[] REQUIRED_SDK_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,17 +46,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mapsCreate(googleMap);
+    }
+
+    @SuppressLint("MissingPermission")
+    public void mapsCreate(GoogleMap googleMap) {
         GPSTracker tracker = new GPSTracker(MapsActivity.this);
+
         double lat = tracker.getLatitude();
         double lng = tracker.getLongitude();
 
-        // Add a marker for current location and move the camera
+
         LatLng currentLocation = new LatLng(lat, lng);
-        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location Marker"));
+        // Add a marker for current location and move the camera
+        //mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
+        mMap.setMyLocationEnabled(true);
     }
 
-    protected boolean checkPermissions() {
+    protected void checkPermissions() {
         final List<String> missingPermissions = new ArrayList<String>();
         // check all required dynamic permissions
         for (final String permission : REQUIRED_SDK_PERMISSIONS) {
@@ -74,9 +85,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Arrays.fill(grantResults, PackageManager.PERMISSION_GRANTED);
             onRequestPermissionsResult(REQUEST_CODE_ASK_PERMISSIONS, REQUIRED_SDK_PERMISSIONS,
                     grantResults);
-            return true;
         }
-        return true;
     }
 
     @Override
