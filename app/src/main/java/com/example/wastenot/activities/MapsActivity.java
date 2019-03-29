@@ -94,7 +94,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             LatLng currentLocation = new LatLng(lat, lng);
             float zoom = mMap.getCameraPosition().zoom;
-            CameraPosition cameraPosition = new CameraPosition(currentLocation, zoom, 0, 0);
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                                                                    .target(currentLocation)
+                                                                    .bearing(location.getBearing())
+                                                                    .zoom(zoom)
+                                                                    .build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
