@@ -1,5 +1,6 @@
 package com.example.wastenot.model;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -45,6 +46,7 @@ public class GPSTracker extends Service implements LocationListener {
         getLocation();
     }
 
+    @SuppressLint("MissingPermission")
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext
@@ -185,24 +187,28 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     @Override
+    public IBinder onBind(Intent arg0) {
+        return null;
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
-    }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+
     }
 
     @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }
 

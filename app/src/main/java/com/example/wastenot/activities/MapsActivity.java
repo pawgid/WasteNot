@@ -2,9 +2,12 @@ package com.example.wastenot.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,8 +21,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,11 +30,17 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    public GoogleMap getmMap() {
+        return mMap;
+    }
+
+    public GoogleMap mMap;
+    private LocationManager locationManager;
     private final static int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private static final String[] REQUIRED_SDK_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +50,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Criteria crit = new Criteria();
+        crit.setAccuracy(Criteria.ACCURACY_FINE);
+        crit.setPowerRequirement(Criteria.POWER_LOW);
+        locationManager.requestLocationUpdates(locationManager.getBestProvider(crit, true), 400, 1, locationListener);
     }
 
     @Override
@@ -56,14 +77,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double lat = tracker.getLatitude();
         double lng = tracker.getLongitude();
 
-
         LatLng currentLocation = new LatLng(lat, lng);
         // Add a marker for current location and move the camera
         //mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location Marker"));
+        mMap.setMyLocationEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
-        mMap.setMyLocationEnabled(true);
     }
+
+
+    LocationListener locationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            GPSTracker tracker = new GPSTracker(MapsActivity.this);
+            double lat = tracker.getLatitude();
+            double lng = tracker.getLongitude();
+
+            LatLng currentLocation = new LatLng(lat, lng);
+            float zoom = mMap.getCameraPosition().zoom;
+            CameraPosition cameraPosition = new CameraPosition(currentLocation, zoom, 0, 0);
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
+
 
     protected void checkPermissions() {
         final List<String> missingPermissions = new ArrayList<String>();
