@@ -35,10 +35,6 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    public GoogleMap getmMap() {
-        return mMap;
-    }
-
     public GoogleMap mMap;
     private Marker marker;
     private double lat;
@@ -89,7 +85,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng currentLocation = new LatLng(lat, lng);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 10, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
         mapOnLongClickListener();
     }
 
@@ -109,15 +105,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng markerLocation = marker.getPosition();
                 markerLat = markerLocation.latitude;
                 markerLng = markerLocation.longitude;
-                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?" + "saddr="+ lat + "," + lng + "&daddr=" + markerLat + "," + markerLng));
-                intent.setClassName("com.google.android.apps.maps","com.google.android.maps.MapsActivity");
+                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?" + "saddr=" + lat + "," + lng + "&daddr=" + markerLat + "," + markerLng));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                 startActivity(intent);
             }
         });
     }
-
-
-
 
     LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
