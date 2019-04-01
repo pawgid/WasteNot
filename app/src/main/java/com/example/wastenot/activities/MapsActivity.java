@@ -3,13 +3,13 @@ package com.example.wastenot.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +40,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public GoogleMap mMap;
+    private Marker marker;
+    private double lat;
+    private double lng;
+    private double markerLat;
+    private double markerLng;
     private LocationManager locationManager;
     private final static int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private static final String[] REQUIRED_SDK_PERMISSIONS = new String[]{
@@ -80,20 +84,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         GPSTracker tracker = new GPSTracker(MapsActivity.this);
 
-        double lat = tracker.getLatitude();
-        double lng = tracker.getLongitude();
+        lat = tracker.getLatitude();
+        lng = tracker.getLongitude();
 
         LatLng currentLocation = new LatLng(lat, lng);
-        // Add a marker for current location and move the camera
-        //mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 10, null);
+        mapOnLongClickListener();
+    }
 
+    private void mapOnLongClickListener() {
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng point) {
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions()
+                marker = mMap.addMarker(new MarkerOptions()
                         .position(point)
                         .title(point.toString())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
@@ -101,17 +106,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.new_marker_added) + " " + point.toString(), Toast.LENGTH_LONG)
                         .show();
+                LatLng markerLocation = marker.getPosition();
+                markerLat = markerLocation.latitude;
+                markerLng = markerLocation.longitude;
+                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?" + "saddr="+ lat + "," + lng + "&daddr=" + markerLat + "," + markerLng));
+                intent.setClassName("com.google.android.apps.maps","com.google.android.maps.MapsActivity");
+                startActivity(intent);
             }
         });
-
     }
+
+
 
 
     LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
-//            GPSTracker tracker = new GPSTracker(MapsActivity.this);
-//            double lat = tracker.getLatitude();
-//            double lng = tracker.getLongitude();
 
             double lat = location.getLatitude();
             double lng = location.getLongitude();
@@ -119,10 +128,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng currentLocation = new LatLng(lat, lng);
             float zoom = mMap.getCameraPosition().zoom;
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                                                                .target(currentLocation)
-                                                                .bearing(location.getBearing())
-                                                                .zoom(zoom)
-                                                                .build();
+                    .target(currentLocation)
+                    .bearing(location.getBearing())
+                    .zoom(zoom)
+                    .build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
