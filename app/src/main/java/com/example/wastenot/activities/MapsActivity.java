@@ -4,7 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,9 +23,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
     }
 
     @SuppressLint("MissingPermission")
@@ -61,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Criteria crit = new Criteria();
         crit.setAccuracy(Criteria.ACCURACY_FINE);
         crit.setPowerRequirement(Criteria.POWER_LOW);
-        locationManager.requestLocationUpdates(locationManager.getBestProvider(crit, true), 400, 1, locationListener);
+        locationManager.requestLocationUpdates(locationManager.getBestProvider(crit, true), 0, 1, locationListener);
     }
 
     @Override
@@ -72,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @SuppressLint("MissingPermission")
     public void mapsCreate(GoogleMap googleMap) {
+        mMap.setMyLocationEnabled(true);
         GPSTracker tracker = new GPSTracker(MapsActivity.this);
 
         double lat = tracker.getLatitude();
@@ -80,25 +85,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng currentLocation = new LatLng(lat, lng);
         // Add a marker for current location and move the camera
         //mMap.addMarker(new MarkerOptions().position(currentLocation).title("Current Location Marker"));
-        mMap.setMyLocationEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(17), 2000, null);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 10, null);
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng point) {
+                mMap.addMarker(new MarkerOptions()
+                        .position(point)
+                        .title(point.toString())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.new_marker_added) + " " + point.toString(), Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+
     }
 
 
     LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
-            GPSTracker tracker = new GPSTracker(MapsActivity.this);
-            double lat = tracker.getLatitude();
-            double lng = tracker.getLongitude();
+//            GPSTracker tracker = new GPSTracker(MapsActivity.this);
+//            double lat = tracker.getLatitude();
+//            double lng = tracker.getLongitude();
+
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
 
             LatLng currentLocation = new LatLng(lat, lng);
             float zoom = mMap.getCameraPosition().zoom;
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                                                                    .target(currentLocation)
-                                                                    .bearing(location.getBearing())
-                                                                    .zoom(zoom)
-                                                                    .build();
+                                                                .target(currentLocation)
+                                                                .bearing(location.getBearing())
+                                                                .zoom(zoom)
+                                                                .build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
@@ -111,7 +133,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public void onProviderDisabled(String provider) {
         }
     };
-
 
     protected void checkPermissions() {
         final List<String> missingPermissions = new ArrayList<String>();

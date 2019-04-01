@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WasteNot</string>
+    <string name="new_marker_added">Destination Point Added:</string>
 </resources>
