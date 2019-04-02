@@ -12,9 +12,12 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.wastenot.R;
@@ -57,6 +60,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById (R.id.fab);
+        fab.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick (View view) {
+                Snackbar.make (view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction ("Action", null).show ();
+            }
+        });
     }
 
     @SuppressLint("MissingPermission")
