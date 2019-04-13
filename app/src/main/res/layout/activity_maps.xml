@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="activities.MapsActivity">
 
@@ -20,8 +20,6 @@
         android:src="@drawable/floating_button"
         app:borderWidth="0dp"
         app:useCompatPadding="true"
-
-
         map:backgroundTintMode="src_over" />
 
     <fragment
@@ -31,5 +29,4 @@
         android:layout_height="match_parent"
         android:layout_gravity="bottom|end" />
 
-    <!--tools:context=".activities.MapsActivity" -->
 </FrameLayout>
