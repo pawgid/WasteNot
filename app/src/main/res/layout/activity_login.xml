@@ -70,6 +70,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         app:srcCompat="@drawable/waste_not_logo" />
 
 </android.support.constraint.ConstraintLayout>
